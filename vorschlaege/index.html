@@ -1,0 +1,173 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Steffen Grebe: Neue Thumbnail-Vorschläge</title>
+<style>
+/* Layout: je Video eine Karte – Bisher | Variante A | Variante B, darunter Kommentar + Speichern; Fortschritt oben fixiert */
+:root{--bg:#f6f4f2;--panel:#ffffff;--fg:#141414;--mut:#5f5a56;--line:#e3ded9;--accent:#c8221a;--accent-soft:#fbe6e4;--copper:#a8774f;--ok:#1f7a45;--ok-soft:#e3f3e9;--gold:#b98a00;
+--f-body:"Roboto",system-ui,-apple-system,"Segoe UI",sans-serif;--f-disp:"Roboto Condensed","Arial Narrow",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111111;--panel:#1b1b1b;--fg:#f1f1f1;--mut:#a9a39e;--line:#2e2e2e;--accent:#ff4a3d;--accent-soft:#3a1714;--copper:#d0a17a;--ok:#5ccf8a;--ok-soft:#14301f;--gold:#f5c400;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111111;--panel:#1b1b1b;--fg:#f1f1f1;--mut:#a9a39e;--line:#2e2e2e;--accent:#ff4a3d;--accent-soft:#3a1714;--copper:#d0a17a;--ok:#5ccf8a;--ok-soft:#14301f;--gold:#f5c400;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1{font-family:var(--f-disp);font-size:30px;line-height:1.15;margin:0;text-wrap:balance}
+.intro{color:var(--mut);margin:8px 0 0;max-width:68ch}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;justify-content:space-between}
+.count{font-weight:700;font-variant-numeric:tabular-nums}
+.conn{font-size:13px;color:var(--mut)}.conn.err{color:var(--accent)}
+#list{display:flex;flex-direction:column;gap:18px}
+section.v{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px}
+section.v.done{border-color:var(--ok)}
+.vh{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:baseline}
+.nr{font-family:var(--f-disp);font-size:20px;color:var(--copper);font-variant-numeric:tabular-nums}
+.vh h2{margin:0;font-size:18px;font-weight:700}
+.pill{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--line);color:var(--mut)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media(max-width:860px){.row{grid-template-columns:1fr}}
+.col{min-width:0;padding:6px;border:2px solid transparent;border-radius:14px}
+.opt{all:unset;box-sizing:border-box;display:block;min-width:0;cursor:pointer;border-radius:14px;padding:6px;border:2px solid transparent;transition:border-color .15s,background .15s}
+.opt:hover{background:var(--accent-soft)}
+.opt:focus-visible{outline:3px solid var(--copper);outline-offset:2px}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.lab{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:6px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.opt .lab{color:var(--accent)}
+.emp{color:var(--gold);border:1px solid currentColor;border-radius:999px;padding:0 7px;letter-spacing:.04em}
+.th{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:10px;overflow:hidden;background:var(--line)}
+.th img{width:100%;height:100%;object-fit:cover;display:block}
+.ph{aspect-ratio:16/9;max-width:100%;border-radius:10px;border:2px dashed var(--line);display:flex;align-items:center;justify-content:center;text-align:center;padding:12px;color:var(--mut);font-weight:500}
+.chk{position:absolute;left:8px;top:8px;background:var(--accent);color:#fff;font-size:12px;font-weight:700;padding:4px 9px;border-radius:999px}
+.tt{margin:9px 0 0;font-weight:500;line-height:1.4}
+.mm{margin:2px 0 0;font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums}
+.act{display:flex;flex-direction:column;gap:8px}
+.act label{font-size:13px;font-weight:500}
+textarea{width:100%;min-height:60px;font:inherit;font-size:14px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);resize:vertical}
+textarea:focus-visible{outline:3px solid var(--copper);outline-offset:1px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button.save{font:inherit;font-weight:700;font-size:14px;border:0;border-radius:999px;padding:10px 20px;background:var(--accent);color:#fff;cursor:pointer}
+button.save:disabled{opacity:.45;cursor:default}
+button.none{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:transparent;color:var(--fg);cursor:pointer}
+button.none[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+button:focus-visible{outline:3px solid var(--copper);outline-offset:2px}
+.st{font-size:13px;color:var(--mut)}.st.ok{color:var(--ok)}.st.err{color:var(--accent)}
+@media (prefers-reduced-motion:reduce){.opt{transition:none}}
+.sum{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.sum h2{margin:0;font-family:var(--f-disp);font-size:22px}.sum p{margin:0;color:var(--mut);max-width:68ch}
+.sum textarea{min-height:220px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+</style></head><body>
+
+<div class="wrap">
+  <header>
+    <h1>Steffen Grebe: Neue Thumbnail-Vorschläge</h1>
+    <p class="intro">Zu jedem Video sehen Sie links das bisherige Thumbnail und daneben zwei neue Varianten mit dem vorgesehenen Titel. Klicken Sie auf die Variante, die Sie möchten, ergänzen Sie bei Bedarf einen Kommentar und speichern Sie. Die Auswahl wird in diesem Browser gespeichert und lässt sich jederzeit ändern. Wenn Sie fertig sind, kopieren Sie ganz unten die Zusammenfassung und schicken sie uns zu.</p>
+  </header>
+  <div class="bar"><span class="count" id="count"></span><span class="conn" id="conn" role="status"></span></div>
+  <div id="list"></div>
+  <div class="sum">
+    <h2>Auswahl abschicken</h2>
+    <p>Hier steht Ihre gespeicherte Auswahl als Text. Kopieren Sie ihn und senden Sie ihn uns per E-Mail oder Nachricht.</p>
+    <textarea id="summary" readonly aria-label="Zusammenfassung Ihrer Auswahl"></textarea>
+    <div class="btns"><button class="save" type="button" id="copy">Auswahl kopieren</button><span class="st" id="copyst" role="status"></span></div>
+  </div>
+</div>
+
+<script>
+const DATA = [{"nr": "01", "name": "Video 43 · Riester stilllegen, kündigen oder behalten", "alt": {"lab": "Bisher", "titel": "", "meta": "", "ph": "Neues Video, noch kein Thumbnail auf YouTube"}, "vars": [{"id": "A", "rec": true, "img": "img/01_1.jpg", "titel": "Riester kündigen? Diesen Fehler zahlen Sie zurück", "meta": "49 Zeichen"}, {"id": "B", "rec": false, "img": "img/01_2.jpg", "titel": "10.597 € Garantie: Riester behalten oder wechseln?", "meta": "50 Zeichen"}]}, {"nr": "02", "name": "Video 38 · Mit 60 raus aus den Aktien", "alt": {"lab": "Bisher", "titel": "", "meta": "", "ph": "Neues Video, noch kein Thumbnail auf YouTube"}, "vars": [{"id": "A", "rec": true, "img": "img/02_1.jpg", "titel": "Ich bin 61 und habe 450.000 €: jetzt alle Aktien verkaufen?", "meta": "59 Zeichen"}, {"id": "B", "rec": false, "img": "img/02_2.jpg", "titel": "Mit 60 raus aus den Aktien? Warum das ein teurer Fehler ist", "meta": "59 Zeichen"}]}, {"nr": "03", "name": "Video 42 · Crash mit 60", "alt": {"lab": "Bisher", "titel": "Crash mit 60: Was passiert, wenn Ihr Depot 30% fällt?", "meta": "53 Zeichen", "img": "img/03_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/03_1.jpg", "titel": "Ich bin 60, mein Depot fällt um 150.000 €: reicht es noch?", "meta": "58 Zeichen"}, {"id": "B", "rec": false, "img": "img/03_2.jpg", "titel": "Crash mit 60: Was passiert, wenn das Depot 30 % fällt?", "meta": "54 Zeichen"}]}, {"nr": "04", "name": "Depotkosten", "alt": {"lab": "Aktuell auf YouTube", "titel": "Honorberater erklärt: Was ihr Depot WIRKLICH kostet", "meta": "82 Aufrufe", "img": "img/04_0.jpg"}, "vars": [{"id": "A", "rec": false, "img": "img/04_1.jpg", "titel": "Depotkosten: Was Ihr Depot wirklich kostet", "meta": "42 Zeichen"}, {"id": "B", "rec": true, "img": "img/04_2.jpg", "titel": "Depotkosten: Was Ihr Depot wirklich kostet", "meta": "42 Zeichen"}]}, {"nr": "05", "name": "Rentenlücke", "alt": {"lab": "Aktuell auf YouTube", "titel": "RENTENLÜCKE: Warum jeder JETZT seinen Finanzplan erstellen sollte", "meta": "150 Aufrufe", "img": "img/05_0.jpg"}, "vars": [{"id": "A", "rec": false, "img": "img/05_1.jpg", "titel": "Reicht meine Rente? So berechnen Sie Ihre Rentenlücke", "meta": "53 Zeichen"}, {"id": "B", "rec": true, "img": "img/05_2.jpg", "titel": "Reicht meine Rente? So berechnen Sie Ihre Rentenlücke", "meta": "53 Zeichen"}]}, {"nr": "06", "name": "Mein Weg in die Finanzbranche", "alt": {"lab": "Aktuell auf YouTube", "titel": "Warum ich Honorarberater wurde MEIN Weg in die Finanzbranche", "meta": "26 Aufrufe", "img": "img/06_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/06_1.jpg", "titel": "Ex-Banker packt aus: Was Berater selbst kaufen", "meta": "46 Zeichen"}, {"id": "B", "rec": false, "img": "img/06_2.jpg", "titel": "Ex-Banker packt aus: Was Berater selbst kaufen", "meta": "46 Zeichen"}]}, {"nr": "07", "name": "Provisionsverkauf", "alt": {"lab": "Aktuell auf YouTube", "titel": "Warum Provisionsverkauf Sie 192.000€ KOSTEN kann!", "meta": "20 Aufrufe", "img": "img/07_0.jpg"}, "vars": [{"id": "A", "rec": false, "img": "img/07_1.jpg", "titel": "Provisionsberater: Warum Sie das 192.000€ kosten kann", "meta": "53 Zeichen"}, {"id": "B", "rec": true, "img": "img/07_2.jpg", "titel": "Provisionsberater: Warum Sie das 192.000€ kosten kann", "meta": "53 Zeichen"}]}, {"nr": "08", "name": "Strukturvertrieb", "alt": {"lab": "Aktuell auf YouTube", "titel": "Strukturvertrieb: Wer verdient an Ihrem Vertrag wirklich?", "meta": "46 Aufrufe", "img": "img/08_0.jpg"}, "vars": [{"id": "A", "rec": false, "img": "img/08_1.jpg", "titel": "Strukturvertrieb: Wer an Ihrem Vertrag mitverdient", "meta": "50 Zeichen"}, {"id": "B", "rec": true, "img": "img/08_2.jpg", "titel": "Strukturvertrieb: Wer an Ihrem Vertrag mitverdient", "meta": "50 Zeichen"}]}, {"nr": "09", "name": "Altersvorsorge 2026", "alt": {"lab": "Aktuell auf YouTube", "titel": "Altersvorsorge 2026: Riester, Rürup oder ETF - WAS lohnt sich noch?", "meta": "230 Aufrufe", "img": "img/09_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/09_1.jpg", "titel": "Riester, Rürup oder ETF: Was lohnt sich 2026 noch?", "meta": "50 Zeichen"}, {"id": "B", "rec": false, "img": "img/09_2.jpg", "titel": "Riester, Rürup oder ETF: Was lohnt sich 2026 noch?", "meta": "50 Zeichen"}]}, {"nr": "10", "name": "Firma als Altersvorsorge", "alt": {"lab": "Aktuell auf YouTube", "titel": "Ihre Firma ist KEINE Altersvorsorge! 3 Tipps für Unternehmer", "meta": "107 Aufrufe", "img": "img/10_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/10_1.jpg", "titel": "Unternehmer: Warum Ihre Firma keine Altersvorsorge ist", "meta": "54 Zeichen"}, {"id": "B", "rec": false, "img": "img/10_2.jpg", "titel": "Unternehmer: Warum Ihre Firma keine Altersvorsorge ist", "meta": "54 Zeichen"}]}, {"nr": "11", "name": "Aktive Fonds (Bank-Fonds)", "alt": {"lab": "Aktuell auf YouTube", "titel": "Ihr Geld in Gefahr? Die Wahrheit über Bank-Fonds", "meta": "366 Aufrufe", "img": "img/11_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/11_1.jpg", "titel": "Aktive Fonds: Warum 90% gegen den Markt verlieren", "meta": "49 Zeichen"}, {"id": "B", "rec": false, "img": "img/11_2.jpg", "titel": "Aktive Fonds: Warum 90% gegen den Markt verlieren", "meta": "49 Zeichen"}]}, {"nr": "12", "name": "Lebensversicherung", "alt": {"lab": "Aktuell auf YouTube", "titel": "Finanz-Check: Ist Ihre Lebensversicherung noch profitabel?", "meta": "183 Aufrufe", "img": "img/12_0.jpg"}, "vars": [{"id": "A", "rec": false, "img": "img/12_1.jpg", "titel": "Lebensversicherung: Kündigen oder behalten?", "meta": "43 Zeichen"}, {"id": "B", "rec": true, "img": "img/12_2.jpg", "titel": "Lebensversicherung: Kündigen oder behalten?", "meta": "43 Zeichen"}]}, {"nr": "13", "name": "Witwenrente", "alt": {"lab": "Aktuell auf YouTube", "titel": "Witwenrente: Diese Denkfehler machen viele Paare!", "meta": "930 Aufrufe", "img": "img/13_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/13_1.jpg", "titel": "Witwenrente: Wie viel Ihrem Partner wirklich bleibt", "meta": "51 Zeichen"}, {"id": "B", "rec": false, "img": "img/13_2.jpg", "titel": "Witwenrente: Wie viel Ihrem Partner wirklich bleibt", "meta": "51 Zeichen"}]}, {"nr": "14", "name": "Sonderzahlung Rente", "alt": {"lab": "Aktuell auf YouTube", "titel": "Sonderzahlung Rentenversicherung ab 50: Lohnt sich das wirklich?", "meta": "379 Aufrufe", "img": "img/14_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/14_1.jpg", "titel": "Was bringen 10.000€? Rentenpunkte kaufen ab 50", "meta": "46 Zeichen"}, {"id": "B", "rec": false, "img": "img/14_2.jpg", "titel": "Was bringen 10.000€? Rentenpunkte kaufen ab 50", "meta": "46 Zeichen"}]}, {"nr": "15", "name": "Honorarberatung", "alt": {"lab": "Aktuell auf YouTube", "titel": "Honorarberatung: Warum sie sich bezahlt machen kann", "meta": "393 Aufrufe", "img": "img/15_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/15_1.jpg", "titel": "Honorarberatung: Warum „kostenlos“ 290.000€ kostet", "meta": "50 Zeichen"}, {"id": "B", "rec": false, "img": "img/15_2.jpg", "titel": "Honorarberatung: Warum „kostenlos“ 290.000€ kostet", "meta": "50 Zeichen"}]}, {"nr": "16", "name": "Aktie, Fonds oder ETF", "alt": {"lab": "Aktuell auf YouTube", "titel": "Aktie, Fonds oder ETF? Der Unterschied einfach erklärt", "meta": "122 Aufrufe", "img": "img/16_0.jpg"}, "vars": [{"id": "A", "rec": false, "img": "img/16_1.jpg", "titel": "Aktie, Fonds oder ETF? Der Unterschied in 10 Minuten", "meta": "52 Zeichen"}, {"id": "B", "rec": true, "img": "img/16_2.jpg", "titel": "Aktie, Fonds oder ETF? Der Unterschied in 10 Minuten", "meta": "52 Zeichen"}]}, {"nr": "17", "name": "Wofür sparen (Namibia)", "alt": {"lab": "Aktuell auf YouTube", "titel": "Wofür sparen wir eigentlich ein Leben lang?", "meta": "122 Aufrufe", "img": "img/17_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/17_1.jpg", "titel": "Wofür sparen wir eigentlich? Die Antwort aus Namibia", "meta": "52 Zeichen"}, {"id": "B", "rec": false, "img": "img/17_2.jpg", "titel": "Wofür sparen wir eigentlich? Die Antwort aus Namibia", "meta": "52 Zeichen"}]}, {"nr": "18", "name": "Video 34 · Vermögensverwaltung", "alt": {"lab": "Aktuell auf YouTube", "titel": "Vermögensverwaltung ab 500.000 €: Warum Sie oft zu viel zahlen", "meta": "153 Aufrufe", "img": "img/18_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/18_1.jpg", "titel": "Vermögensverwaltung ab 500.000€: Zahlen Sie zu viel?", "meta": "52 Zeichen"}, {"id": "B", "rec": false, "img": "img/18_2.jpg", "titel": "Vermögensverwaltung ab 500.000€: Zahlen Sie zu viel?", "meta": "52 Zeichen"}]}, {"nr": "19", "name": "Video 39 · 4 Fragen", "alt": {"lab": "Aktuell auf YouTube", "titel": "4 Fragen, die jeden schlechten Finanzberater entlarven", "meta": "64 Aufrufe", "img": "img/19_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/19_1.jpg", "titel": "Finanzberater oder Verkäufer? 4 Fragen entlarven ihn", "meta": "52 Zeichen"}, {"id": "B", "rec": false, "img": "img/19_2.jpg", "titel": "Finanzberater oder Verkäufer? 4 Fragen entlarven ihn", "meta": "52 Zeichen"}]}, {"nr": "20", "name": "Video 35 · Schenken oder vererben", "alt": {"lab": "Aktuell auf YouTube", "titel": "Schenken oder vererben? Was Familien wissen sollten", "meta": "303 Aufrufe", "img": "img/20_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/20_1.jpg", "titel": "Erbschaftsteuer sparen: Warum Schenken oft klüger ist", "meta": "53 Zeichen"}, {"id": "B", "rec": false, "img": "img/20_2.jpg", "titel": "Erbschaftsteuer sparen: Warum Schenken oft klüger ist", "meta": "53 Zeichen"}]}, {"nr": "21", "name": "Video 53 · Kickbacks", "alt": {"lab": "Aktuell auf YouTube", "titel": "Kickbacks: Die versteckte Gebühr in Ihren Fonds", "meta": "142 Aufrufe", "img": "img/21_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/21_1.jpg", "titel": "Gebühren in Fonds: Das wissen viele nicht", "meta": "41 Zeichen"}, {"id": "B", "rec": false, "img": "img/21_2.jpg", "titel": "Gebühren in Fonds: Das wissen viele nicht", "meta": "41 Zeichen"}]}, {"nr": "22", "name": "Video 36 · Schenken an die Enkel", "alt": {"lab": "Aktuell auf YouTube", "titel": "Schenkung an Kinder und Enkel: So behalten Sie die Kontrolle!", "meta": "45 Aufrufe", "img": "img/22_0.jpg"}, "vars": [{"id": "A", "rec": true, "img": "img/22_1.jpg", "titel": "Schenkung an Enkel: So behalten Sie die Kontrolle", "meta": "49 Zeichen"}, {"id": "B", "rec": false, "img": "img/22_2.jpg", "titel": "Schenkung an Enkel: So behalten Sie die Kontrolle", "meta": "49 Zeichen"}]}];
+const state = {}, local = {};
+const KEY = 'grebe-thumbnail-vorschlaege-2026-11';
+let db = false;
+function store() { try { localStorage.setItem(KEY, JSON.stringify(state)); return true; } catch (e) { return false; } }
+try { Object.assign(state, JSON.parse(localStorage.getItem(KEY) || '{}')); const p = KEY + '-probe'; localStorage.setItem(p, '1'); localStorage.removeItem(p); db = true; } catch (e) { db = false; }
+const EMPTY = {wahl: null, kommentar: ''};
+function el(tag, attrs = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) { if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else e.setAttribute(k, v); }
+  for (const c of kids) if (c) e.append(c);
+  return e;
+}
+const cur = k => local[k] || state[k] || EMPTY;
+const wahlText = w => w === 'A' ? 'Variante A' : w === 'B' ? 'Variante B' : w === 'keine' ? 'keine von beiden' : 'offen';
+function dirty(k) { const l = local[k]; if (!l) return false; const s = state[k] || EMPTY; return l.wahl !== s.wahl || (l.kommentar || '') !== (s.kommentar || ''); }
+
+function body(c, badge) {
+  const pic = c.img ? el('div', {class: 'th'}, el('img', {src: c.img, alt: c.titel || '', loading: 'lazy'})) : el('div', {class: 'ph', text: c.ph});
+  if (badge && c.img) pic.append(el('span', {class: 'chk', text: '✓ Ausgewählt'}));
+  return [pic, c.titel ? el('p', {class: 'tt', text: c.titel}) : null, c.meta ? el('p', {class: 'mm', text: c.meta}) : null];
+}
+function renderItem(it) {
+  const k = it.nr, c = cur(k), saved = state[k], done = saved && saved.wahl != null;
+  const sec = el('section', {class: 'v' + (done ? ' done' : ''), id: 'v-' + k});
+  sec.append(el('div', {class: 'vh'}, el('span', {class: 'nr', text: k}), el('h2', {text: it.name}),
+    el('span', {class: 'pill' + (done ? ' ok' : ''), text: done ? 'Gespeichert: ' + wahlText(saved.wahl) : 'Offen'})));
+  const row = el('div', {class: 'row'});
+  row.append(el('div', {class: 'col'}, el('div', {class: 'lab', text: it.alt.lab}), ...body(it.alt, false)));
+  for (const v of it.vars) {
+    const on = c.wahl === v.id;
+    const b = el('button', {class: 'opt', type: 'button', 'aria-pressed': String(on), 'aria-label': 'Variante ' + v.id + ' auswählen'},
+      el('div', {class: 'lab'}, el('span', {text: 'Variante ' + v.id}), v.rec ? el('span', {class: 'emp', text: 'Unsere Empfehlung'}) : null), ...body(v, on));
+    b.addEventListener('click', () => { local[k] = {...cur(k), wahl: on ? null : v.id}; rerender(k); });
+    row.append(b);
+  }
+  sec.append(row);
+  const ta = el('textarea', {id: 'k-' + k, placeholder: 'Kommentar oder Änderungswunsch (optional)'});
+  ta.value = c.kommentar || '';
+  const save = el('button', {class: 'save', type: 'button', text: 'Auswahl speichern'});
+  const upd = () => { save.disabled = !db || !dirty(k); };
+  ta.addEventListener('input', () => { local[k] = {...cur(k), kommentar: ta.value}; upd(); });
+  const none = el('button', {class: 'none', type: 'button', 'aria-pressed': String(c.wahl === 'keine'), text: 'Keine passt'});
+  none.addEventListener('click', () => { local[k] = {...cur(k), wahl: c.wahl === 'keine' ? null : 'keine'}; rerender(k); });
+  const st = el('span', {class: 'st', role: 'status'});
+  if (dirty(k)) st.textContent = db ? 'Noch nicht gespeichert.' : '';
+  upd();
+  save.addEventListener('click', () => {
+    const v = cur(k); save.disabled = true; st.className = 'st'; st.textContent = 'Speichert …';
+    const prev = state[k];
+    state[k] = {wahl: v.wahl, kommentar: v.kommentar || '', geaendert: new Date().toISOString()};
+    if (store()) {
+      delete local[k]; rerender(k);
+      const s2 = document.querySelector('#v-' + k + ' .st'); s2.className = 'st ok'; s2.textContent = 'Gespeichert.';
+    } else {
+      if (prev) state[k] = prev; else delete state[k];
+      st.className = 'st err'; st.textContent = 'Nicht gespeichert. Der Browser lässt das Speichern nicht zu.'; save.disabled = false;
+    }
+  });
+  sec.append(el('div', {class: 'act'}, el('label', {for: 'k-' + k, text: 'Kommentar'}), ta, el('div', {class: 'btns'}, save, none, st)));
+  return sec;
+}
+function rerender(k) {
+  const it = DATA.find(i => i.nr === k), old = document.getElementById('v-' + k);
+  const ta = old.querySelector('textarea'), focus = document.activeElement === ta, pos = ta.selectionStart;
+  const fresh = renderItem(it); old.replaceWith(fresh);
+  if (focus) { const t = fresh.querySelector('textarea'); t.focus(); t.setSelectionRange(pos, pos); }
+  count();
+}
+function count() {
+  const n = DATA.filter(i => state[i.nr] && state[i.nr].wahl != null).length;
+  document.getElementById('count').textContent = n + ' von ' + DATA.length + ' Videos entschieden';
+  summary();
+}
+const list = document.getElementById('list');
+for (const it of DATA) list.append(renderItem(it));
+count();
+
+function summary() {
+  const lines = ['Steffen Grebe: Neue Thumbnail-Vorschläge – Auswahl', ''];
+  for (const it of DATA) {
+    const s = state[it.nr];
+    lines.push(it.nr + ' ' + it.name + ': ' + (s && s.wahl != null ? wahlText(s.wahl) : 'offen') + (s && s.kommentar ? ' | Kommentar: ' + s.kommentar.replace(/\s+/g, ' ').trim() : ''));
+  }
+  const ta = document.getElementById('summary'); if (ta) ta.value = lines.join('\n');
+}
+summary();
+{
+  const conn = document.getElementById('conn');
+  if (db) conn.textContent = 'Ihre Auswahl wird in diesem Browser gespeichert.';
+  else { conn.className = 'conn err'; conn.textContent = 'Dieser Browser lässt kein Speichern zu (privates Fenster?). Bitte in einem normalen Fenster öffnen.'; }
+  const cs = document.getElementById('copyst'), ta = document.getElementById('summary');
+  document.getElementById('copy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(ta.value); cs.className = 'st ok'; cs.textContent = 'Kopiert.'; }
+    catch (e) { ta.focus(); ta.select(); cs.className = 'st'; cs.textContent = 'Text ist markiert. Bitte mit Strg+C bzw. Cmd+C kopieren.'; }
+  });
+}
+</script>
+
+</body></html>
